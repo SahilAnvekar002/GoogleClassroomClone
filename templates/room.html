@@ -1,0 +1,226 @@
+{% extends 'layout.html' %}
+{% block title %} MyAcademy - Room {% endblock %}
+{% block body %}
+
+<div class="modal fade" id="YouTubeModal" tabindex="-1" aria-labelledby="YouTubeModal" aria-hidden="true">
+    <div class="modal-dialog d-flex">
+        <div class="modal-content" style="height: 40vh;width: 50vw;">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex" style="justify-content: center;align-items: center;flex-direction: column;">
+                <img src="{{ url_for('static', filename='media/youtube.png') }}" alt="Youtube" height="100px"
+                    width="100px" class="my-3">
+                <div class="input-group mb-3">
+                    <input type="url" class="form-control" placeholder="Paste youtube video url" id="url" name="url">
+                    <button class="btn btn-danger mx-2" onclick="getYoutubeUrl()" data-bs-dismiss="modal">Add
+                        Video</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="LinkModal" tabindex="-1" aria-labelledby="LinkModal" aria-hidden="true">
+    <div class="modal-dialog d-flex">
+        <div class="modal-content" style="width: 50vw;">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex" style="justify-content: center;align-items: center;flex-direction: column;">
+                <div class="input-group mb-3">
+                    <input type="url" class="form-control" placeholder="Link" id="link" name="link">
+                    <button class="btn btn-success mx-2" data-bs-dismiss="modal" onclick="getLink()">Add Link</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <ul class="nav nav-tabs my-3">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/rooms/{{room_id}}">Classwork</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/rooms/{{room_id}}/people">People</a>
+        </li>
+    </ul>
+
+    <div class="d-flex mx-4">
+        <div class="col-xl-8 col-md-6 my-3 mx-3">
+            <div class="card bg-dark text-white mb-4"
+                style="height: 30vh; background-image: url(https://www.gstatic.com/classroom/themes/img_bookclub.jpg) !important;">
+                <div class="card-body"></div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <h2 class="card-text">{{room_name}} - {{subject}}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="card mx-3 my-3" style="height: 20vh;">
+            <div class="card-body"
+                style="display: flex;flex-direction: column;justify-content: center;">
+                <p class="card-text">Room Code</p>
+                <h5 class="card-title" style="color: rgb(19,115,51);fill: rgb(19,115,51);">{{room_id}}</h5>
+            </div>
+        </div>
+    </div>
+
+    {% if user_id == admin %}
+    <div class="mx-5 mb-2"
+        style="box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.4);border-radius: 10px;width: 50vw;min-height: 10vh;display: flex;align-items: center;justify-content: center;">
+        <div class="row g-0" style="display: flex; align-items: center; width: 100%;">
+            <div class="col-md-1" style="margin-left: 20px;" id="profile_img">
+                <img src="{{ url_for('static', filename='media/profile.png') }}" class="img-fluid rounded-start"
+                    alt="profile" style="border-radius: 50% !important;" height="40px" width="40px">
+            </div>
+            <div class="col-md-5" style="cursor: pointer;" data-bs-toggle="collapse" href="#upload" role="button"
+                aria-expanded="false" aria-controls="upload" id="announcement" onclick="toggleForm()">
+                <div class="card-body">
+                    <p class="card-text" style="color: rgba(0,0,0,.549);font-size: 0.9rem;">Announce something to your
+                        class.</p>
+                </div>
+            </div>
+            <div class="collapse" id="upload" style="padding: 1.5rem;">
+                <form action="/rooms/{{room_id}}" method="post" enctype="multipart/form-data">
+                    <textarea name="message" placeholder="Announce something to your class" id="message" cols="90"
+                        rows="7" class="mb-3"
+                        style="border: none;border-bottom: 1px solid black;resize: none;outline: none;"></textarea>
+                    <iframe id="youtube_video" width="100%" height="100" src="https://www.youtube.com/embed/"
+                        style="display: none;"></iframe>
+                    <div class="card my-3" style="display: none;" id="uploaded_file">
+                        <div class="card-body" style="display: flex;align-items: center;font-size: 1.1rem;">
+
+                        </div>
+                    </div>
+                    <div class="card my-3" style="display: none;" id="uploaded_link">
+                        <div class="card-body" style="display: flex;align-items: center;font-size: 1.1rem;">
+
+                        </div>
+                    </div>
+
+                    <div class="my-3" style="display: flex;justify-content: space-between;">
+                        <div>
+                            <i class="fa-brands fa-youtube mx-2" style="font-size: 22px;cursor: pointer;"
+                                data-bs-toggle="modal" data-bs-target="#YouTubeModal"></i>
+                            <label for="file">
+                                <i class="fa-solid fa-upload mx-2" style="font-size: 22px;cursor: pointer;"></i>
+                            </label>
+                            <input type="file" name="file" id="file" style="display: none;" oninput="getFile()">
+                            <input type="hidden" name="hidden_link" id="hidden_link" style="display: none;">
+                            <input type="hidden" name="hidden_url" id="hidden_url" style="display: none;">
+                            <i class="fa-solid fa-link mx-2" style="font-size: 22px;cursor: pointer;"
+                                data-bs-toggle="modal" data-bs-target="#LinkModal"></i>
+                        </div>
+                        <div>
+                            <button type="reset" class="btn btn-light mx-2" data-bs-toggle="collapse" href="#upload"
+                                role="button" aria-expanded="false" aria-controls="upload"
+                                onclick="hideForm()">Cancel</button>
+                            <button type="submit" class="btn btn-dark mx-2">Post</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% for classwork in classworks %}
+    {% set file = files[loop.index0] %}
+    {% set extension = classwork.filename.split('.')[1] %}
+    <div class="card mb-3 mx-5 my-4" style="width: 50vw;">
+        <div class="card-body">
+            <h5 class="card-title">{{admin_username}}</h5>
+            <p class="card-text">{{classwork.message}}</p>
+
+            {% if classwork.filename != "" %}
+            {% if extension == "pdf" %}
+            <iframe src="data:application/pdf;base64,{{file}}" frameborder="0" width="70%" name="sample"
+                style="height: 40vh;border: 1px solid rgba(0, 0, 0, 0.175);border-radius: 7px;" onclick="openPdf()"></iframe>
+            {% else %}
+            <img src="data:image/png;base64,{{file}}" width="70%"
+                style="height: 40vh;border: 1px solid rgba(0, 0, 0, 0.175);border-radius: 7px;"></img>
+            {% endif %}
+            {% endif %}
+
+            <div class="d-flex my-2">
+                {% if classwork.url != "" %}
+                <iframe src="https://www.youtube.com/embed/{{classwork.url}}" frameborder="0" width="45%" name="sample"
+                    style="height: 10vh;border: 1px solid rgba(0, 0, 0, 0.175);border-radius: 7px;" allowfullscreen></iframe>
+                {% endif %}
+                {% if classwork.link != "" %}
+                <div class="card mx-3"
+                    style="height: 10vh;border-radius: 7px;width: 45%;display: flex;justify-content: center;align-items: center;">
+                    <a href="https://{{classwork.link}}" target="_blank">Link</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if length == 0 %}
+    <div class="card mx-5 my-4" style="width: 50vw;height: 20vh;">
+        <div class="card-body"
+            style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
+            <h5 class="card-title" style="color: rgb(19,115,51);fill: rgb(19,115,51);">This is where you’ll see updates
+                for this class</h5>
+            <p class="card-text">Use the stream to connect with your class and check for announcements</p>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    let profile_img = document.getElementById('profile_img')
+    let announcement = document.getElementById('announcement')
+    function toggleForm() {
+        profile_img.style.display = 'none';
+        announcement.style.display = 'none';
+    }
+    function hideForm() {
+        profile_img.style.display = 'flex';
+        announcement.style.display = 'flex';
+        let youtube_video = document.getElementById('youtube_video').style.display = "none";
+        let uploaded_link = document.getElementById('uploaded_link').style.display = "none";
+        let uploaded_file = document.getElementById('uploaded_file').style.display = "none";
+    }
+
+    function getYoutubeUrl() {
+        let url = document.getElementById('url').value;
+        let youtube_video = document.getElementById('youtube_video');
+        youtube_video.src = "https://www.youtube.com/embed/" + url
+        youtube_video.style.display = 'flex'
+        let hidden_url = document.getElementById('hidden_url')
+        hidden_url.value = url
+    }
+
+    function getLink() {
+        let link = document.getElementById('link');
+        let uploaded_link = document.getElementById('uploaded_link');
+        if (link.value.startsWith("http")) {
+            uploaded_link.lastElementChild.innerHTML = link.value
+        }
+        else {
+            uploaded_link.lastElementChild.innerHTML = "http://" + link.value
+        }
+        uploaded_link.style.display = 'flex'
+        let hidden_link = document.getElementById('hidden_link')
+        hidden_link.value = link.value
+    }
+
+    function getFile() {
+        let file = document.getElementById('file');
+        let uploaded_file = document.getElementById('uploaded_file');
+        uploaded_file.lastElementChild.innerHTML = file.value.split("\\")[2];
+        uploaded_file.style.display = 'flex';
+    }
+
+    function openPdf(){
+        
+    }
+
+</script>
+{% endblock %}

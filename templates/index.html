@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block title %} MyAcademy - Home {% endblock %}
+{% block body %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Joined Rooms</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>      
+        <div class="row">
+            {% for room in rooms %}
+            <a href="/rooms/{{room._id}}" style="text-decoration: none;">
+            <div class="col-xl-8 col-md-6" style="cursor: pointer;">
+                <div class="card bg-dark text-white mb-4" style="height: 20vh; background-image: url(https://www.gstatic.com/classroom/themes/img_bookclub.jpg) !important;">
+                    <div class="card-body">{{room.room_name}}<p style="font-size: 0.9rem;">{{room.subject}}</p></div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <p class="card-text">Sahil Anvekar</p>
+                    </div>
+                </div>
+            </div>
+            </a>
+            {% endfor %}
+            
+        </div>
+    </div>
+</main>
+{% endblock %}

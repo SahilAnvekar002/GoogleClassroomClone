@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block title %} MyAcademy - Join Room {% endblock %}
+{% block body %}
+<main style="background-color: rgba(0, 0, 0, 0.03); min-height: 90vh;">
+    <div class="container-fluid px-4" >
+        <h1 class="mt-4 mx-4">Join a Room</h1>
+         
+        <div class="container">
+            <div class="col-lg-5">
+                <div class="card border-0 rounded-lg mt-5">
+                    <div class="card-body" style="background-color: rgba(0, 0, 0, 0.03);">
+                        <form action="/joinroom" method="post"> 
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="roomid" name="roomid" type="text" placeholder="Enter Room Id" required/>
+                                <label for="roomid">Room Id</label>
+                            </div>
+                            <div class="mt-4 mb-0">
+                                <div class="d-grid">
+                                    <button class="btn btn-dark btn-block" type="submit">Join Room</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% block title %} MyAcademy - Create Room {% endblock %}
+{% block body %}
+<main style="background-color: rgba(0, 0, 0, 0.03); min-height: 90vh;">
+    <div class="container-fluid px-4" >
+        <h1 class="mt-4 mx-4">Create New Room</h1>
+         
+        <div class="container">
+            <div class="col-lg-5">
+                <div class="card border-0 rounded-lg mt-5">
+                    <div class="card-body" style="background-color: rgba(0, 0, 0, 0.03);">
+                        <form action="/createroom" method="post"> 
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="roomname" name="roomname" type="text" placeholder="Enter your Room Name" required/>
+                                <label for="username">Room Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="subject" name="subject" type="text" placeholder="Subject" required/>
+                                <label for="subject">Subject</label>
+                            </div>
+                            <div class="mt-4 mb-0">
+                                <div class="d-grid">
+                                    <button class="btn btn-dark btn-block" type="submit">Create Room</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

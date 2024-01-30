@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% block title %} MyAcademy - People {% endblock %}
+{% block body %}
+<div class="container d-flex" style="flex-direction: column;justify-content: center;align-items: center;">
+    <ul class="nav nav-tabs my-3" style="width: 100%;">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/rooms/{{room_id}}">Classwork</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="/rooms/{{room_id}}/people">People</a>
+        </li>
+    </ul>
+
+    <div class="my-3" style="min-width: 45vw;">
+        <div class="teachers" style="border-bottom: 1px solid rgb(19,115,51);fill: rgb(19,115,51); width: 100%;padding: 10px 0;">
+            <h2 style="color: rgb(19,115,51);fill: rgb(19,115,51);">Teacher</h2>
+        </div>
+        <div class="teacher_names my-3">
+            <div class="teacher mx-2">
+                <img src="{{ url_for('static', filename='media/profile.png') }}" alt="" width="30px" height="30px" style="border-radius: 50%;margin-right: 10px;">
+                <span>{{admin.username}}</span>
+            </div>
+        </div>
+        <div class="students mt-5" style="border-bottom: 1px solid rgb(19,115,51);fill: rgb(19,115,51); width: 100%;padding: 10px 0;">
+            <h2 style="color: rgb(19,115,51);fill: rgb(19,115,51);">Students</h2>
+        </div>
+        <div class="student_names my-3">
+            {% for member in members %}
+            <div class="student mx-2 my-2" style="border-bottom: 1px solid rgb(218,220,224);padding-bottom: 15px;">
+                <img src="{{ url_for('static', filename='media/profile.png') }}" alt="" width="30px" height="30px" style="border-radius: 50%;margin-right: 10px;">
+                <span>{{member.username}}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
